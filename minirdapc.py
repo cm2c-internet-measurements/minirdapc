@@ -24,7 +24,7 @@ def print_banner(short=False):
     print("")
     print("MINI RDAP CLIENT: (c) Carlos Martinez, carlos@xt6.us")
     if not short:
-        print(" Version 0.2 2019-05-26")
+        print(" Version 0.2.1 2019-07-04")
         print("")
         print(" Use --help for usage information.")
         print("")

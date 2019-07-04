@@ -13,6 +13,7 @@ import time
 import pyjq
 import json
 import logging
+import sys
 
 class rdap_client:
 
@@ -27,7 +28,12 @@ class rdap_client:
         """
         self.base_url = w_base_url
         self.apikey = w_apikey
-        self.rdap_cache = shelve.open(w_cache_file)
+        try:
+            self.rdap_cache = shelve.open(w_cache_file)
+        except:
+            print("Cannot open cache file: {}".format(w_cache_file))
+            print("Does ./var exist?")
+            sys.exit(-1)
         self.max_cache_time = 60*3600 # cache validity in seconds
         self.last_response = None
     # end default constructor
