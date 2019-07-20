@@ -26,9 +26,14 @@ class rdap_client:
         """
         self.base_url = w_base_url
         self.apikey = w_apikey
-        self.rdap_cache = shelve.open(w_cache_file)
         self.max_cache_time = 60*3600 # cache validity in seconds
         self.last_response = None
+
+        try:
+            self.rdap_cache = shelve.open(w_cache_file)
+        except:
+            print("ERROR: Could not create cache file. Maybe ./var doesn't exist?")
+            raise
     # end default constructor
 
     # destructor

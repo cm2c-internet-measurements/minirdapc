@@ -5,7 +5,7 @@
 from setuptools import setup, find_namespace_packages
 
 setup(name='minirdapc',
-      version='0.2.1',
+      version='0.2.2',
       description='cm2c Mini RDAP Client',
       url='https://github.com/cm2c-internet-measurements/minirdapc',
       author='Carlos M. Martinez',
