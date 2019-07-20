@@ -12,5 +12,5 @@ setup(name='minirdapc',
       author_email='carlos@lacnic.net',
       license='BSD',
       packages=['minirdapc'],
-      install_requires=['ipaddr'],
+      install_requires=['ipaddr', 'pyjq'],
       zip_safe=False)
