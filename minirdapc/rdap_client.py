@@ -49,7 +49,7 @@ class rdap_client:
         """
         try:
             rdap_url = self.base_url + w_uri
-            print(rdap_url)
+            # print(rdap_url)
             r = requests.get(rdap_url)
             if r.status_code == 200:
                 return r.json()
