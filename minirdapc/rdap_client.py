@@ -78,6 +78,26 @@ class rdap_client:
         return r
     # end pyjq
 
+    # pyjq interface
+    def _pyjqAll(self, w_query, w_json = None):
+        """
+        Runs a jq query against a json structure, gets all results
+        """
+
+        if w_json == None:
+            q_json = self.last_response
+        else:
+            q_json = w_json
+
+        try:
+            r = pyjq.all(w_query, q_json)
+        except:
+            raise
+        #
+        return r
+    # end pyjq
+
+
     # get_poc ##############################################################################################
     def get_poc(self, w_role, w_depth=0, w_json = None):
         """
@@ -126,18 +146,47 @@ class rdap_client:
 
     # bgn getAllResources ##################################################################################
     def getAllResources(self, w_entity):
+        result = {}
         # jq query: .entities[0].handle
         self.res = self.rdap_query("entity", w_entity)
         jq = '.networks[] | if .ipVersion=="v6" then .handle else empty end'
         try:
-            res = self._pyjq(jq, self.last_response)
+            res = self._pyjqAll(jq, self.last_response)
+            result['ipv6'] = res
         except pyjq._pyjq.ScriptRuntimeError:
             res = "Networks not found"
             logging.debug("Resources for entity {} not found, current JSON is {}" \
                 .format(w_entity, self.last_response))
         except:
             raise
-        return res
+
+        self.res = self.rdap_query("entity", w_entity)
+        jq = '.networks[] | if .ipVersion=="v4" then .handle else empty end'
+        try:
+            res = self._pyjqAll(jq, self.last_response)
+            result['ipv4'] = res
+        except pyjq._pyjq.ScriptRuntimeError:
+            res = "Networks not found"
+            logging.debug("Resources for entity {} not found, current JSON is {}" \
+                .format(w_entity, self.last_response))
+        except:
+            raise
+
+        self.res = self.rdap_query("entity", w_entity)
+        jq = '.autnums[].handle'
+        try:
+            res = self._pyjqAll(jq, self.last_response)
+            result['autnums'] = res
+        except pyjq._pyjq.ScriptRuntimeError:
+            res = "Networks not found"
+            logging.debug("Resources for entity {} not found, current JSON is {}" \
+                .format(w_entity, self.last_response))
+        except:
+            raise
+
+
+        # logging.debug(res)
+        return result
     # end getAllResources ####################################################################################
 
 
