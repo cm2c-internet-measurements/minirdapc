@@ -16,7 +16,7 @@ import pyjq
 import json
 import logging
 
-from rdap_client import rdap_client
+from minirdapc.rdap_client import rdap_client
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -49,6 +49,11 @@ def cli(query, type, host, advquery, apikey):
             print_banner(True)
             res = rdapc.prefixToOrgid(query)
             out = "{prefix},{orgid}".format(prefix=query, orgid=res)
+            print(out)
+        elif advquery in ['getAllResources'] :
+            print_banner(True)
+            res = rdapc.getAllResources(query)
+            out = "{entity},{res}".format(entity=query, res=res)
             print(out)
         else:
             print_banner()

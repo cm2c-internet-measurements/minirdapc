@@ -124,6 +124,24 @@ class rdap_client:
         return res
     # end prefixToOrgid ####################################################################################
 
+    # bgn getAllResources ##################################################################################
+    def getAllResources(self, w_entity):
+        # jq query: .entities[0].handle
+        self.res = self.rdap_query("entity", w_entity)
+        jq = '.networks[] | if .ipVersion=="v6" then .handle else empty end'
+        try:
+            res = self._pyjq(jq, self.last_response)
+        except pyjq._pyjq.ScriptRuntimeError:
+            res = "Networks not found"
+            logging.debug("Resources for entity {} not found, current JSON is {}" \
+                .format(w_entity, self.last_response))
+        except:
+            raise
+        return res
+    # end getAllResources ####################################################################################
+
+
+
     # rdap query ###########################################################################################
     def rdap_query(self, w_type, w_query):
 
